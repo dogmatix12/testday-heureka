@@ -9,7 +9,7 @@ lib-cov
 coverage
 
 # Compiled source
-# dist/
+dist/
 
 # Dependency directories
 node_modules/
