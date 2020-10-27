@@ -1,0 +1,8 @@
+.card-deck
+    each category in categories
+        .card(style="width: 18rem;")
+            .embed-responsive.p-4
+                img.card-img-top(src="/assets/icons/category.svg" style="opacity: 0.5;" alt=category.title)
+            .card-body
+                h5.card-title #{category.title}
+                a.stretched-link(href=`/category/${category.categoryId}`) #{I18N.LIST_PRODUCTS_LINK}

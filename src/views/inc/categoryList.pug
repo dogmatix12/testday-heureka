@@ -1,0 +1,5 @@
+.list-group.list-group-flush
+    //- button.list-group-item #{I18N.CATEGORY_LIST_TITLE}
+    each category in categories
+        - var active = category.categoryId==categoryId
+        a.list-group-item.list-group-item-action(href=`/category/${category.categoryId}` class=active?'active':'') #{category.title}

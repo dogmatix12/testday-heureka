@@ -1,0 +1,38 @@
+extends layout
+
+mixin offerRow(offer)
+    .col-8
+        p #{offer.title}
+    .col-2
+        a(href=offer.url) #{I18N.BUY_LINK}
+    .col-2
+        p #{offer.priceWithCurrency}
+
+block content
+    .container
+        .row.mb-2.border
+            .col-3.lign-self-center.my-2
+                | <svg class="bd-placeholder-img" width="100" height="100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="15%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+            .col-9
+                h5 #{product.title}
+                nav(aria-label="breadcrumb")
+                ol.breadcrumb
+                    li.breadcrumb-item
+                        a(href="/") #{I18N.HOME_BREADCRUMB_LINK}
+                    li.breadcrumb-item.active
+                        a(href=`/category/${category.categoryId}`) #{category.title}
+                    li.breadcrumb-item.active(aria-current="page") #{product.title}
+                p #{product.description}
+        
+        .row.border
+            .col-12
+                h5 #{I18N.COMPARE_PRICES_TITLE}
+            each offer in firstOffers
+                +offerRow(offer)
+
+            if hiddenOffers
+                .col-12.text-center
+                    a(href="?allOffers=true") #{I18N.NEXT_OFFERS_LINK}
+  
+
+        

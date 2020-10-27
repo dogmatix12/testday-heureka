@@ -1,0 +1,33 @@
+//- List products of given category
+
+each product in productPage.items
+    .row.mb-2
+        .col.md-6
+            .row.border
+                .col-3.lign-self-center.my-2
+                    | <svg class="bd-placeholder-img" width="100" height="100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="15%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                .col-6
+                    h5 #{product.title}
+                    p #{product.shortDescription}
+                .col-3.align-self-end.my-2
+                    p #{product.priceRange}
+                    a.btn.btn-primary(href="/product/" + product.productId ) #{I18N.PRODUCT_DETAIL_LINK}
+//- Pagination
+.row
+    .col
+        ul.pagination.justify-content-center
+            - var maxPages = 10;
+            - var prevDisabled= (productPage.offset < 1)
+            - var nextDisabled= (productPage.offset > (productPage.count - productPage.pageSize))
+            li.page-item(class=prevDisabled?'disabled':'')
+                a.page-link(href="?offset=" + (productPage.offset - productPage.pageSize) ) #{I18N.PAGE_PREV}
+            - var n = (productPage.offset / productPage.pageSize);
+            - n = (n - maxPages/2)
+            if (n < 0)
+                - n = 0
+            while n < (productPage.count / productPage.pageSize)
+                - var pageOffset = (n * productPage.pageSize);
+                li.page-item(class= (pageOffset==productPage.offset) ?'active':'')
+                    a.page-link(href="?offset=" + (pageOffset) )= ++n
+            li.page-item(class=nextDisabled?'disabled':'')
+                a.page-link(href="?offset=" + (productPage.offset + productPage.pageSize)) #{I18N.PAGE_NEXT}
