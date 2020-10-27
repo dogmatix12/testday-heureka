@@ -1,6 +1,6 @@
 
 export const CONFIG = {
-    HTTP_SERVER_PORT: 8080,
+    HTTP_SERVER_PORT: process.env.PORT || 8080,
 
     PRODUCT_PAGE_SIZE: 5,
 

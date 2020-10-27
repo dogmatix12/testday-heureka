@@ -2,9 +2,10 @@ import { ProductDetail } from "../model/productDetail";
 import { Category } from "../model/category.model";
 import { IPageResult } from "../model/iPageResult";
 import { Offer } from "../model/offer.model";
+import { IProductDetail } from "../model/iProductDetail";
 import { Logger } from "./logger";
 import { categoryArr, mockOfferArr, productMap } from "./mockData";
-import { IProductDetail } from "model/iProductDetail";
+
 
 
 const log = new Logger({
