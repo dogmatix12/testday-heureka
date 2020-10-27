@@ -1,0 +1,63 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach to Process",
+      "processId": "${command:PickProcess}",
+      "restart": true,
+      "protocol": "inspector"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "runtimeArgs": [
+        "--nolazy",
+        "-r",
+        "ts-node/register"
+      ],
+      "sourceMaps": true,
+      "args": [
+        "${workspaceFolder}\\src\\server.ts"
+      ],
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": null,
+      "timeout": 10000,
+      "protocol": "inspector",
+      "restart": true,
+      "outputCapture": "std", // capture winston logger
+      "env": {
+        "debug": "server*",
+        "NODE_ENV": "development"
+      }
+    },
+    {
+      // "trace": "sm",
+      "name": "Run single mocha test",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/mocha/bin/mocha",
+      "sourceMaps": true,
+      "args": [
+        "--exit",
+        "--timeout=9000",
+        "-r",
+        "ts-node/register/transpile-only",
+        "${relativeFile}"
+      ],
+      "cwd": "${workspaceFolder}",
+      "protocol": "inspector",
+      "runtimeExecutable": null,
+      "outputCapture": "std", // capture winston logger
+      "env": {
+        "debug": "server*",
+        "NODE_ENV": "development"
+      }
+    }
+  ]
+}

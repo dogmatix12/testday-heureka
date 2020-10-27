@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2017",
+    "noImplicitAny": false,
+    "esModuleInterop": true,                  /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "incremental": false,
+    "strict": true,                           /* Enable all strict type-checking options. */
+    "outDir": "dist",
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "rootDir": "src",
+    "watch": false,
+    "baseUrl": "src",
+    "noUnusedLocals": true
+  },
+  "exclude": [
+    "src/**/*_spec.ts",
+    "**/node_modules"
+  ],
+  "files.exclude": {
+    "**/node_modules": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}

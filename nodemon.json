@@ -1,0 +1,13 @@
+{
+  "watch": ["src"],
+  "ext": "ts",
+  "ignore": ["src/**/*.spec.ts"],
+  "delay": "3",
+  "env": {
+    "_NODE_DEBUG": "request",
+    "NODE_ENV": "development",
+    "TZ": "Etc/UTC",
+    "_BXP_SUPPRESS_LOG": "true"
+  },
+  "exec": "node --inspect=5858 --require ts-node/register src/server.ts"
+}
