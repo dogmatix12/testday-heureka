@@ -25,10 +25,10 @@ Your app should now be running on [localhost:8080](http://localhost:8080/).
 
 ```
 heroku create
-git push heroku master
+git push heroku
 heroku open
 ```
-
+// - https://safe-chamber-80030.herokuapp.com/ | https://git.heroku.com/safe-chamber-80030.git
 ## Known pitfalls
 
 - Load More Offers at product page: currently only implemented via reload page, if javascript is enabled, can be implemented via Fetch API 
