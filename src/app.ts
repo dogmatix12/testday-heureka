@@ -6,14 +6,45 @@ import { Logger } from './services/logger';
 import { CONFIG } from './config';
 import { DataProvider } from './services/dataProvider';
 import { INTLFormaters } from './services/dataFormater';
+import { disableNock, enableNock, enableServiceMock } from './services/mockData/apiService.mock';
 
+
+const enum EMockState {
+    Enabled = "Enabled",
+    Disabled = "Disabled",
+}
 const log = new Logger({
     name: "AppLogger",
 });
+
 // ----------------------------------------------------------------
 const app: Express = express();
 
 app.locals.pretty = true;
+
+// switch dataProvider to use nock to simulate data response on requests
+app.locals.nockState = EMockState.Disabled;
+app.locals.nockStateLast = app.locals.nockState;
+
+app.use((req, res, next) => {
+    if (app.locals.nockStateLast != app.locals.nockState) {
+        switch (app.locals.nockState) {
+            case EMockState.Enabled: {
+                const nockScope = enableNock();
+                enableServiceMock(nockScope);
+                break;
+            };
+            case EMockState.Disabled: {
+                disableNock();
+                break;
+            }
+            default:
+                throw Error("unsupported EMockState");
+        }
+        app.locals.nockStateLast = app.locals.nockState;
+    }
+    next();
+});
 
 // loopback -> 127.0.0.1/8, ::1/128
 app.set('trust proxy', 'loopback'); // the client’s IP address as the left-most entry in the X-Forwarded-* header.
@@ -28,6 +59,16 @@ app.use('/assets', express.static(path.join(__dirname, 'public')));
 app.get('/favicon.ico', (req, res) => res.sendStatus(204));
 
 const dataProvider = new DataProvider();
+
+// === Debug administration ===
+app.get('/controll/nock/enable', (req: Request, res: Response) => {
+    app.locals.nockState = EMockState.Enabled;
+    res.redirect('/');
+});
+app.get('/controll/nock/disable', (req: Request, res: Response) => {
+    app.locals.nockState = EMockState.Disabled;
+    res.redirect('/');
+});
 
 // === Frontend pages ===
 // Homepage
@@ -82,7 +123,6 @@ app.get('/category/:categoryId', async (req: Request, res: Response, next: NextF
 app.get('/product/:productId', async (req: Request, res: Response, next: NextFunction) => {
     const pProductId = parseInt(req.params.productId, 10);
     const pAllOffers = req.query.allOffers && true || false;
-
     log.debug(`Get product: ${pProductId}`);
 
     try {
