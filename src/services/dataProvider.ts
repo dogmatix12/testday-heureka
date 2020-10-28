@@ -72,9 +72,7 @@ export class DataProvider {
         }
         const productDetails = await Promise.all(
             products.items.map(async (p) => {
-                console.time('getOffers_' + p.productId);
                 const offers = await this.getOffers(p.productId);
-                console.timeEnd('getOffers_' + p.productId);
                 const offerDetails = DataProvider.computeProductDetail(offers);
                 const productDetail = new ProductDetail(p, offerDetails);
                 return productDetail;
@@ -88,7 +86,8 @@ export class DataProvider {
         } as IPageResult<ProductDetail>);
     }
 
-    public getCategories(): Promise<Category[]> {
-        return this.fetcher.getCategories();
+    public async getCategories(): Promise<Category[]> {
+        const categories = await this.fetcher.getCategories();
+        return categories;
     }
 }

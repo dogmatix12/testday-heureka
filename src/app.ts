@@ -27,13 +27,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/assets', express.static(path.join(__dirname, 'public')));
 app.get('/favicon.ico', (req, res) => res.sendStatus(204));
 
+const dataProvider = new DataProvider();
+
 // === Frontend pages ===
 // Homepage
 app.get('/', async (req: Request, res: Response, next: NextFunction) => {
     log.debug("Get /");
 
     try {
-        const dataProvider = new DataProvider();
         const categories = await dataProvider.getCategories();
 
         res.render('homepage.pug', {
@@ -53,7 +54,6 @@ app.get('/category/:categoryId', async (req: Request, res: Response, next: NextF
     log.debug(`Get category: ${pCategoryId}`);
 
     try {
-        const dataProvider = new DataProvider();
         const categories = await dataProvider.getCategories();
 
         // get current category (we have one level of categories, another API call is not necessary)
@@ -86,7 +86,6 @@ app.get('/product/:productId', async (req: Request, res: Response, next: NextFun
     log.debug(`Get product: ${pProductId}`);
 
     try {
-        const dataProvider = new DataProvider();
         const productDetail = await dataProvider.getProduct(pProductId);
 
         const categories = await dataProvider.getCategories();
