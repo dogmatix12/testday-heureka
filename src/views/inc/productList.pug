@@ -10,7 +10,7 @@ each product in productPage.items
                     h5 #{product.title}
                     p #{product.shortDescription}
                 .col-3.align-self-end.my-2
-                    p #{product.priceRange}
+                    p #{INTL.FormatCurrency(product.min)} - #{INTL.FormatCurrency(product.max, I18N.CURRENCY_SYMBOL)}
                     a.btn.btn-primary(href="/product/" + product.productId ) #{I18N.PRODUCT_DETAIL_LINK}
 //- Pagination
 .row

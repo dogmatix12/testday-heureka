@@ -6,7 +6,7 @@ mixin offerRow(offer)
     .col-2
         a(href=offer.url) #{I18N.BUY_LINK}
     .col-2
-        p #{offer.priceWithCurrency}
+        p #{INTL.FormatCurrency(offer.price, I18N.CURRENCY_SYMBOL)}
 
 block content
     .container

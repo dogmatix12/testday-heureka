@@ -1,4 +1,3 @@
-import { CONFIG } from "../config";
 
 export class Offer {
     description: string | null;
@@ -27,10 +26,6 @@ export class Offer {
         this.url = model.url;
     }
 
-    // Data formater (for simplicity, included directly in the class)
-    get priceWithCurrency(): string {
-        return `${this.price} ${CONFIG.I18N.CURRENCY_SYMBOL}`;
-    }
 }
 
 // https://heureka-testday.herokuapp.com/offers/3

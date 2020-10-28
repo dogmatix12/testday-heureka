@@ -5,6 +5,7 @@ import * as path from 'path';
 import { Logger } from './services/logger';
 import { CONFIG } from './config';
 import { DataProvider } from './services/dataProvider';
+import { INTLFormaters } from './services/dataFormater';
 
 const log = new Logger({
     name: "AppLogger",
@@ -63,6 +64,7 @@ app.get('/category/:categoryId', async (req: Request, res: Response, next: NextF
         const productPage = await dataProvider.getProductPage(pCategoryId, CONFIG.PRODUCT_PAGE_SIZE, pOffset);
 
         res.render('category.pug', {
+            INTL: INTLFormaters,
             I18N: CONFIG.I18N,
             pageTitle: `${CONFIG.I18N.PAGE_TITLE} (${category.title})`,
             categoryId: pCategoryId,
@@ -94,6 +96,7 @@ app.get('/product/:productId', async (req: Request, res: Response, next: NextFun
         }
 
         res.render('product.pug', {
+            INTL: INTLFormaters,
             I18N: CONFIG.I18N,
             pageTitle: `${CONFIG.I18N.PAGE_TITLE}`,
             category,
