@@ -83,12 +83,12 @@ export class RestAPIFetcher {
 
         const [products, productsCount] = await Promise.all([
             HttpFetcher.fetchJSON<Product[]>(url, this.options),
-            HttpFetcher.fetchJSON<number>(countUrl, this.options)
+            HttpFetcher.fetchJSON<{ count: number }>(countUrl, this.options)
         ]);
         return ({
             offset: pOffset,
             pageSize: pLimit,
-            count: productsCount,
+            count: Number(productsCount.count),
             items: products.map((p) => new Product(p))
         } as IPageResult<Product>);
     }

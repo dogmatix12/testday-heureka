@@ -71,7 +71,9 @@ export function enableServiceMock(nockScope: nock.Scope): nock.Scope {
     .intercept(productsCountRE, 'GET')
     .reply(200, (uri /*, requestBody: nock.Body */) => {
       const rCategoryId = Number(uri.replace(productsCountRE, '$2'));
-      return productMap.get(rCategoryId)?.length;
+      return {
+        count: productMap.get(rCategoryId)?.length
+      }
     });
 
   const offersRE = new RegExp('(.*)/offers/(.*)/');
@@ -85,7 +87,9 @@ export function enableServiceMock(nockScope: nock.Scope): nock.Scope {
     .intercept(offersCountRE, 'GET')
     .reply(200, (uri /*, requestBody: nock.Body */) => {
       // const rOfferId = Number(uri.replace(offersCountRE, '$2'));
-      return mockOfferArr.length;
+      return {
+        count: mockOfferArr.length
+      };
     })
 
 

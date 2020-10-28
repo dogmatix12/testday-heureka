@@ -41,7 +41,7 @@ export class DataProvider {
     private async getOffers(pProductId: number): Promise<Offer[]> {
         log.debug(`getOffers(${pProductId})`);
 
-        // `/offers/${pProductId}/count/`  --> 11
+        // `/offers/${pProductId}/count/`  not used, all offers must be fetched to compute min/max price
         const offers = await this.fetcher.getOffers(pProductId);
         return offers;
     }
