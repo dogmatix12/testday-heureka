@@ -41,7 +41,7 @@ export class RestAPIFetcher {
 
         // https://heureka-testday.herokuapp.com/offers/{productId}
         let url = this.baseURI;
-        url += `/offers/${pProductId}`;
+        url += `/offers/${pProductId}/`;
 
         const offers = await HttpFetcher.fetchJSON<Offer[]>(url, this.options);
         log.debug('Call getOffers() - done');
@@ -53,7 +53,7 @@ export class RestAPIFetcher {
 
         // https://heureka-testday.herokuapp.com/categories/
         let url = this.baseURI;
-        url += '/categories';
+        url += '/categories/';
 
         const categories = await HttpFetcher.fetchJSON<Category[]>(url, this.options);
         return categories.map((c) => new Category(c));
@@ -64,7 +64,7 @@ export class RestAPIFetcher {
 
         // https://heureka-testday.herokuapp.com/product/{productId}/
         let url = this.baseURI;
-        url += `/product/${pProductId}`;
+        url += `/product/${pProductId}/`;
 
         const product = await HttpFetcher.fetchJSON<Product>(url, this.options);
         return new Product(product);
@@ -75,11 +75,11 @@ export class RestAPIFetcher {
 
         // /products/{categoryId}/{offset}/{limit}/
         let url = this.baseURI;
-        url += `/products/${pCategoryId}/${pOffset}/${pLimit}`;
+        url += `/products/${pCategoryId}/${pOffset}/${pLimit}/`;
 
         // /products/categoryId/count
         let countUrl = this.baseURI;
-        countUrl += `/products/${pCategoryId}/count`;
+        countUrl += `/products/${pCategoryId}/count/`;
 
         const [products, productsCount] = await Promise.all([
             HttpFetcher.fetchJSON<Product[]>(url, this.options),
