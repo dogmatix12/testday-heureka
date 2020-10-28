@@ -4,6 +4,8 @@ export const CONFIG = {
 
     PRODUCT_PAGE_SIZE: 5,
 
+    CATALOGUE_API_URI: 'https://heureka-testday.herokuapp.com',
+
     I18N: {
         // page titles
         PAGE_TITLE: "Testday - Homepage",

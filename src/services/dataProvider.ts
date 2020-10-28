@@ -4,22 +4,19 @@ import { IPageResult } from "../model/iPageResult";
 import { Offer } from "../model/offer.model";
 import { IProductDetail } from "../model/iProductDetail";
 import { Logger } from "./logger";
-import { categoryArr, mockOfferArr, productMap } from "./mockData";
-
-
+import { RestAPIFetcher } from "./restAPIFetcher";
+import { CONFIG } from "../config";
 
 const log = new Logger({
     name: "DataProvider",
 });
 
 export class DataProvider {
-    private static readonly PRODUCT_PAGE_SIZE = 5;
 
-    private static async getOffers(pProductId: number): Promise<Offer[]> {
-        log.debug(`getOffers(${pProductId})`);
+    private readonly fetcher: RestAPIFetcher;
 
-
-        return mockOfferArr.map( (o) => new Offer(o)); 
+    constructor() {
+        this.fetcher = new RestAPIFetcher(CONFIG.CATALOGUE_API_URI);
     }
 
     // itterate offers and set productDetail for getProductPage()
@@ -41,33 +38,43 @@ export class DataProvider {
         return offerDetails;
     }
 
+    private async getOffers(pProductId: number): Promise<Offer[]> {
+        log.debug(`getOffers(${pProductId})`);
+
+        // `/offers/${pProductId}/count/`  --> 11
+        const offers = await this.fetcher.getOffers(pProductId);
+        return offers;
+    }
+
+
     public async getProduct(pProductId: number): Promise<ProductDetail> {
         log.debug(`getProduct(${pProductId})`);
 
-        const products = productMap.get(1);
-        if (!products) {
+        // get Products for page and total count
+        const product = await this.fetcher.getProduct(pProductId);
+        if (!product) {
             throw new Error("Product does not exists");
         }
-        const p = products[0];
-        const offers = await DataProvider.getOffers(p.productId);
+        const offers = await this.getOffers(product.productId);
 
         const offerDetails = DataProvider.computeProductDetail(offers);
-        const productDetail = new ProductDetail(p, offerDetails);
+        const productDetail = new ProductDetail(product, offerDetails);
         return productDetail;
     }
 
-    public async getProductPage(pCategoryId: number, limit: number, pOffset: number): Promise<IPageResult<ProductDetail>> {
+    public async getProductPage(pCategoryId: number, pLimit: number, pOffset: number): Promise<IPageResult<ProductDetail>> {
         log.debug(`getProductPage(${pCategoryId})`);
-        // `/products/${pCategoryId}/count/`  --> 11
-        const products = productMap.get(pCategoryId);
-        if (!products) {
-            throw new Error("Product does not exists");
-        }
-        const productPage = products.slice(pOffset, pOffset + DataProvider.PRODUCT_PAGE_SIZE);
 
+        // get Products for page and total count
+        const products = await this.fetcher.getProductsPage(pCategoryId, pLimit, pOffset);
+        if (!products) {
+            throw new Error("Product does not found for category");
+        }
         const productDetails = await Promise.all(
-            productPage.map(async (p) => {
-                const offers = await DataProvider.getOffers(p.productId);
+            products.items.map(async (p) => {
+                console.time('getOffers_' + p.productId);
+                const offers = await this.getOffers(p.productId);
+                console.timeEnd('getOffers_' + p.productId);
                 const offerDetails = DataProvider.computeProductDetail(offers);
                 const productDetail = new ProductDetail(p, offerDetails);
                 return productDetail;
@@ -75,13 +82,13 @@ export class DataProvider {
         );
         return ({
             offset: pOffset,
-            pageSize: DataProvider.PRODUCT_PAGE_SIZE,
-            count: products.length,
+            pageSize: pLimit,
+            count: products.count,
             items: productDetails
         } as IPageResult<ProductDetail>);
     }
 
     public getCategories(): Promise<Category[]> {
-        return Promise.resolve(categoryArr);
+        return this.fetcher.getCategories();
     }
 }

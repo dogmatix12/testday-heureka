@@ -5,12 +5,12 @@
     "noImplicitAny": false,
     "esModuleInterop": true,                  /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
     "moduleResolution": "node",
-    "resolveJsonModule": true,
+    "resolveJsonModule": false,
     "incremental": false,
     "strict": true,                           /* Enable all strict type-checking options. */
     "outDir": "dist",
     "sourceMap": true,
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "rootDir": "src",
     "watch": false,
     "baseUrl": "src",
