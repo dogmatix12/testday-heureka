@@ -29,7 +29,7 @@ heroku open
 ```
 >  heroku create --remote improvements --region eu
 
-> git push improvements main 
+> git push improvements improvements:main 
 > heroku open --remote improvements
 ```
 // Creating app... done, ⬢ guarded-fjord-94801, region is eu
