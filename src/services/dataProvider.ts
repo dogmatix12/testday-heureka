@@ -2,7 +2,6 @@ import { ProductDetail } from "../model/productDetail";
 import { Category } from "../model/category.model";
 import { IPageResult } from "../model/iPageResult";
 import { Offer } from "../model/offer.model";
-import { IProductDetail } from "../model/iProductDetail";
 import { Logger } from "./logger";
 import { RestAPIFetcher } from "./restAPIFetcher";
 import { CONFIG } from "../config";
@@ -17,25 +16,6 @@ export class DataProvider {
 
     constructor() {
         this.fetcher = new RestAPIFetcher(CONFIG.CATALOGUE_API_URI);
-    }
-
-    // itterate offers and set productDetail for getProductPage()
-    private static computeProductDetail(pOffers: Offer[]): IProductDetail {
-        const offerDetails = pOffers.reduce((acc, o) => {
-            acc.max = (acc.max == undefined || o.price > acc.max) ? o.price : acc.max;
-            acc.min = (acc.min == undefined || o.price < acc.min) ? o.price : acc.min;
-
-            // get last valid description
-            acc.description = o.description ? o.description : acc.description;
-            return acc;
-        }, {
-            offers: pOffers,
-            description: null,
-            min: null,
-            max: null
-        } as IProductDetail);
-
-        return offerDetails;
     }
 
     private async getOffers(pProductId: number): Promise<Offer[]> {
@@ -56,9 +36,7 @@ export class DataProvider {
             throw new Error("Product does not exists");
         }
         const offers = await this.getOffers(product.productId);
-
-        const offerDetails = DataProvider.computeProductDetail(offers);
-        const productDetail = new ProductDetail(product, offerDetails);
+        const productDetail = new ProductDetail(product, offers);
         return productDetail;
     }
 
@@ -73,8 +51,7 @@ export class DataProvider {
         const productDetails = await Promise.all(
             products.items.map(async (p) => {
                 const offers = await this.getOffers(p.productId);
-                const offerDetails = DataProvider.computeProductDetail(offers);
-                const productDetail = new ProductDetail(p, offerDetails);
+                const productDetail = new ProductDetail(p, offers);
                 return productDetail;
             })
         );
@@ -87,7 +64,6 @@ export class DataProvider {
     }
 
     public async getCategories(): Promise<Category[]> {
-        const categories = await this.fetcher.getCategories();
-        return categories;
+        return this.fetcher.getCategories();
     }
 }

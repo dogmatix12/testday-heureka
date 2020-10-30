@@ -6,10 +6,11 @@ import { Product } from "./product.model";
 export class ProductDetail extends Product implements IProductDetail {
     public static readonly SHORT_DESC_LEN = 150;
 
+    public description: string | null = null;                   // first not*null value from offers
+    public img_urls: Set<string> = new Set<string>();    // all values from offers
+    public min: number | null = null;              // min price from offers
+    public max: number | null = null;              // max price from offers
     public readonly offers: Offer[];
-    public readonly description: string | null;      // first not*null value from offers
-    public readonly min: number | null;              // min price from offers
-    public readonly max: number | null;              // max price from offers
 
     // Data formater (for simplicity, included directly in the class)
     // TODO: move to INTLFormaters
@@ -21,13 +22,34 @@ export class ProductDetail extends Product implements IProductDetail {
         }
     }
 
-    public constructor(pModel: Product, pDetail: IProductDetail) {
-        super(pModel);
-
-        this.description = pDetail.description;
-        this.min = pDetail.min;
-        this.max = pDetail.max;
-        this.offers = pDetail.offers;
+    get mainImgUrl(): string | null {
+        console.log("---------XX");
+        if (this.img_urls.size > 0) {
+            console.log("---------");
+            return this.img_urls.values().next().value;
+        }
+        return null;
     }
 
+    public constructor(pModel: Product, pOffers: Offer[]) {
+        super(pModel);
+
+        this.offers = pOffers;
+        this.computeProductDetail();
+    }
+
+
+    // itterate offers and set productDetail for getProductPage()
+    private computeProductDetail(): void {
+        this.offers.forEach((o) => {
+            this.max = (this.max == undefined || o.price > this.max) ? o.price : this.max;
+            this.min = (this.min == undefined || o.price < this.min) ? o.price : this.min;
+
+            // get last valid description
+            this.description = o.description ? o.description : this.description;
+            if (o.img_url) {
+                this.img_urls.add(o.img_url);
+            }
+        });
+    }
 }

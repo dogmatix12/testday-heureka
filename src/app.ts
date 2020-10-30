@@ -33,7 +33,7 @@ app.use((req, res, next) => {
                 const nockScope = enableNock();
                 enableServiceMock(nockScope);
                 break;
-            };
+            }
             case EMockState.Disabled: {
                 disableNock();
                 break;
@@ -78,11 +78,13 @@ app.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const categories = await dataProvider.getCategories();
 
+        log.debug(`render - start`);
         res.render('homepage.pug', {
             I18N: CONFIG.I18N,
             pageTitle: CONFIG.I18N.PAGE_TITLE,
             categories
         });
+        log.debug(`render - done`);
     } catch (e) {
         next(e);
     }

@@ -44,7 +44,6 @@ export class RestAPIFetcher {
         url += `/offers/${pProductId}/`;
 
         const offers = await HttpFetcher.fetchJSON<Offer[]>(url, this.options);
-        log.debug('Call getOffers() - done');
         return offers.map((o) => new Offer(o));
     }
 
