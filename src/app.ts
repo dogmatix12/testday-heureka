@@ -24,7 +24,7 @@ app.locals.pretty = true;
 
 // switch dataProvider to use nock to simulate data response on requests
 app.locals.nockState = EMockState.Enabled; // EMockState.Disabled;
-app.locals.nockStateLast = app.locals.nockState;
+app.locals.nockStateLast = null;
 
 app.use((req, res, next) => {
     if (app.locals.nockStateLast != app.locals.nockState) {
