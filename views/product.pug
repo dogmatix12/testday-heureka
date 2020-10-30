@@ -11,9 +11,7 @@ mixin offerRow(offer)
 block content
     .container
         .row.mb-2.border
-            .col-3.lign-self-center.my-2
-                +productImage(product)
-            .col-9
+            .col-12
                 h5 #{product.title}
                 nav(aria-label="breadcrumb")
                 ol.breadcrumb
@@ -22,6 +20,9 @@ block content
                     li.breadcrumb-item.active
                         a(href=`/category/${category.categoryId}`) #{category.title}
                     li.breadcrumb-item.active(aria-current="page") #{product.title}
+
+                .col-3.my-2.float-left
+                    +productImage(product)
                 p #{product.description}
         
         .row.border

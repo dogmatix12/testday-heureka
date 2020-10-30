@@ -23,9 +23,7 @@ export class ProductDetail extends Product implements IProductDetail {
     }
 
     get mainImgUrl(): string | null {
-        console.log("---------XX");
         if (this.img_urls.size > 0) {
-            console.log("---------");
             return this.img_urls.values().next().value;
         }
         return null;
