@@ -23,7 +23,7 @@ const app: Express = express();
 app.locals.pretty = true;
 
 // switch dataProvider to use nock to simulate data response on requests
-app.locals.nockState = EMockState.Disabled;
+app.locals.nockState = EMockState.Enabled; // EMockState.Disabled;
 app.locals.nockStateLast = app.locals.nockState;
 
 app.use((req, res, next) => {
@@ -49,13 +49,13 @@ app.use((req, res, next) => {
 // loopback -> 127.0.0.1/8, ::1/128
 app.set('trust proxy', 'loopback'); // the client’s IP address as the left-most entry in the X-Forwarded-* header.
 
-app.set('views', path.join(__dirname, '/views'));
+app.set('views', path.join(__dirname, '..', 'views'));
 app.set('view engine', 'pug');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/assets', express.static(path.join(__dirname, 'public')));
+app.use('/assets', express.static(path.join(__dirname, '..', 'public')));
 app.get('/favicon.ico', (req, res) => res.sendStatus(204));
 
 const dataProvider = new DataProvider();
